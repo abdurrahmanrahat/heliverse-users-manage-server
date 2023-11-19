@@ -55,9 +55,13 @@ async function run() {
             if (req.query?.availability) {
                 query.available = req.query.availability === "Available" ? true : false;
             }
+            if (req.query?.search) {
+                query.first_name = { $regex: search, $options: "i" };
+            }
 
             console.log(req.query);
             console.log(query);
+
 
             const result = await usersCollection.find(query).limit(limit).skip(skip).toArray();
             res.send(result);
