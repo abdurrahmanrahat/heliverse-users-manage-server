@@ -34,6 +34,7 @@ async function run() {
         -----------------------*/
 
         const usersCollection = client.db('heliverse-task').collection('users');
+        const teamMembersCollection = client.db('heliverse-task').collection('teamMembers');
 
 
         // get user data with email specific
@@ -60,7 +61,12 @@ async function run() {
             res.send(result);
         })
 
-        
+        // post new member to db 
+        app.post("/teamMembers", async (req, res) => {
+            const newMember = req.body;
+            const result = await teamMembersCollection.insertOne(newMember);
+            res.send(result);
+        })
 
 
         // Send a ping to confirm a successful connection
