@@ -38,7 +38,13 @@ async function run() {
 
         // get user data with email specific
         app.get('/users', async (req, res) => {
-            const result = await usersCollection.find().toArray();
+            console.log(req.query.limit);
+            const limit = parseInt(req.query.limit || 20);
+            const page = parseInt(req.query.page || 1);
+            const skip = (page - 1) * limit;
+            console.log(limit, page, skip);
+
+            const result = await usersCollection.find().limit(limit).skip(skip).toArray();
             res.send(result);
         })
 
