@@ -43,14 +43,24 @@ async function run() {
             const skip = (page - 1) * limit;
 
             let query = {};
-            if(req.query.gender){
-                query = {gender: req.query.gender}
+            if (req.query?.gender) {
+                query.gender = req.query.gender;
             }
+            if (req.query?.domain) {
+                query.domain = req.query.domain;
+            }
+            if (req.query?.availability) {
+                query.available = req.query.availability === "Available" ? true : false;
+            }
+
             console.log(req.query);
+            console.log(query);
 
             const result = await usersCollection.find(query).limit(limit).skip(skip).toArray();
             res.send(result);
         })
+
+        
 
 
         // Send a ping to confirm a successful connection
