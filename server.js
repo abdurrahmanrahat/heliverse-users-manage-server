@@ -59,9 +59,8 @@ async function run() {
                 query.first_name = { $regex: search, $options: "i" };
             }
 
-            console.log(req.query);
-            console.log(query);
-
+            // console.log(req.query);
+            // console.log(query);
 
             const result = await usersCollection.find(query).limit(limit).skip(skip).toArray();
             res.send(result);
