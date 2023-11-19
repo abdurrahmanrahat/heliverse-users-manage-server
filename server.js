@@ -43,6 +43,8 @@ async function run() {
             const page = parseInt(req.query.page || 1);
             const skip = (page - 1) * limit;
 
+            const search = req.query.search;
+
             let query = {};
             if (req.query?.gender) {
                 query.gender = req.query.gender;
@@ -64,7 +66,29 @@ async function run() {
         // post new member to db 
         app.post("/teamMembers", async (req, res) => {
             const newMember = req.body;
+
+            const query = { email: newMember.email };
+            const existingMember = await teamMembersCollection.findOne(query);
+            if (existingMember) {
+                return res.send("Member already existed");
+            }
+
             const result = await teamMembersCollection.insertOne(newMember);
+            console.log(newMember);
+            res.send(result);
+        })
+
+        // get new member from db
+        app.get("/teamMembers", async (req, res) => {
+            const result = await teamMembersCollection.find().toArray();
+            res.send(result);
+        })
+
+        // delete member from db
+        app.delete("/teamMembers/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await teamMembersCollection.deleteOne(query);
             res.send(result);
         })
 
